@@ -8,10 +8,8 @@ namespace Entities.Models.Extensions
     {
         public static void Map(this TaskWork dbTaskWork, TaskWork taskWork)
         {
-            dbTaskWork.Start = taskWork.Start;
-            dbTaskWork.End = taskWork.End;
             dbTaskWork.Title = taskWork.Title;
-            dbTaskWork.ContactEmail = taskWork.ContactEmail;
+            dbTaskWork.Description = taskWork.Description;
         }
     }
 }

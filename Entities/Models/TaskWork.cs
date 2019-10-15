@@ -12,15 +12,12 @@ namespace Entities.Models
         public Guid Id { get; set; }
 
         [Column]
-        public DateTime Start { get; set; }
-
-        [Column]
-        public DateTime End { get; set; }
+        public DateTime CreateDate { get; set; }
 
         [Column]
         public string Title { get; set; }
 
         [Column]
-        public string ContactEmail { get; set; }
+        public string Description { get; set; }
     }
 }

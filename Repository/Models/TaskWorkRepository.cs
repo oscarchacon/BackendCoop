@@ -28,7 +28,7 @@ namespace Repository.Models
         {
             var taskWorksFind = this.FindAll();
 
-            taskWorksFind = taskWorksFind.OrderBy(taskWork => taskWork.Start);
+            taskWorksFind = taskWorksFind.OrderBy(taskWork => taskWork.CreateDate);
 
             return taskWorksFind.ToList();
         }

@@ -26,14 +26,14 @@ namespace WebApi.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(500)]
-        public IActionResult Get(int? year, int? month)
+        public IActionResult Get()
         {
             try
             {
-                var deathDatesFind = this.taskWorkBR.GetAllDates(year, month);
-                if (deathDatesFind.IsListObjectNull() || deathDatesFind.IsEmptyListObject()) { return NoContent(); }
+                var taskWorksFind = this.taskWorkBR.GetAllTasks();
+                if (taskWorksFind.IsListObjectNull() || taskWorksFind.IsEmptyListObject()) { return NoContent(); }
 
-                return Ok(deathDatesFind);
+                return Ok(taskWorksFind);
             }
             catch(Exception ex)
             {
@@ -41,7 +41,7 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("{id}", Name = "DeathDateById")]
+        [HttpGet("{id}", Name = "TaskWorkById")]
         [ProducesResponseType(typeof(TaskWork), 200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(401)]
@@ -51,10 +51,10 @@ namespace WebApi.Controllers
         {
             try
             {
-                var deathDateFind = this.taskWorkBR.GetDateById(id);
-                if (deathDateFind.IsEmptyObject() || deathDateFind.IsObjectNull()) { return NoContent(); }
+                var taskWorkFind = this.taskWorkBR.GetTaskById(id);
+                if (taskWorkFind.IsEmptyObject() || taskWorkFind.IsObjectNull()) { return NoContent(); }
 
-                return Ok(deathDateFind);
+                return Ok(taskWorkFind);
             }
             catch (Exception ex)
             {
@@ -68,17 +68,16 @@ namespace WebApi.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(500)]
-        public IActionResult Post([FromBody]TaskWork deathDateNew)
+        public IActionResult Post([FromBody]TaskWork taskWorkNew)
         {
-            if (deathDateNew.IsObjectNull()) { return BadRequest(new { Message = "DeathDate object is null" }); }
+            if (taskWorkNew.IsObjectNull()) { return BadRequest(new { Message = "DeathDate object is null" }); }
             if (!ModelState.IsValid) { return BadRequest(new { Message = "Invalid model object" }); }
             try
             {
-                var secuence = this.taskWorkBR.CreateDate(deathDateNew);
-                if (!secuence) { return BadRequest(new { Message = "DeathDate Object is not Created" }); }
-                if (deathDateNew.IsEmptyObject()) { return BadRequest(new { Message = "DeathDate Object is not Created" }); }
+                this.taskWorkBR.CreateTask(taskWorkNew);
+                if (taskWorkNew.IsEmptyObject()) { return BadRequest(new { Message = "Task Object is not Created" }); }
 
-                return CreatedAtRoute("DeathDateById", new { id = deathDateNew.Id }, deathDateNew);
+                return CreatedAtRoute("TaskWorkById", new { id = taskWorkNew.Id }, taskWorkNew);
             }
             catch (Exception ex)
             {
@@ -94,19 +93,19 @@ namespace WebApi.Controllers
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult Put(Guid id, [FromBody]TaskWork deathDate)
+        public IActionResult Put(Guid id, [FromBody]TaskWork taskWork)
         {
             try
             {
                 if (id.Equals(Guid.Empty)) { return BadRequest(new { Message = "Id is Empty" }); }
-                if (deathDate.IsObjectNull()) { return BadRequest(new { Message = "DeathDate Object is Null" }); }
+                if (taskWork.IsObjectNull()) { return BadRequest(new { Message = "Task Object is Null" }); }
                 if (!ModelState.IsValid) { return BadRequest(new { Message = "Invalid model object" }); }
 
-                bool secuence = this.taskWorkBR.UdpdateDate(id, deathDate);
+                bool secuence = this.taskWorkBR.UdpdateTask(id, taskWork);
 
                 if (!secuence) { return NotFound(); }
 
-                return Ok(deathDate);
+                return Ok(taskWork);
             }
             catch (Exception ex)
             {
@@ -127,9 +126,9 @@ namespace WebApi.Controllers
             {
                 if (id.Equals(Guid.Empty)) { return BadRequest(new { Message = "Id is Empty" }); }
 
-                bool secuence = this.taskWorkBR.DeleteDate(id);
+                bool secuence = this.taskWorkBR.DeleteTask(id);
 
-                if (!secuence) { return StatusCode(405, new { Message = "Not allowed to delete Death Date registry." }); }
+                if (!secuence) { return StatusCode(405, new { Message = "Not allowed to delete Task registry." }); }
 
                 return NoContent();
             }

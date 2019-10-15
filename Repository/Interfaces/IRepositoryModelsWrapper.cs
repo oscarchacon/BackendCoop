@@ -7,7 +7,7 @@ namespace Repository.Interfaces
 {
     public interface IRepositoryModelsWrapper
     {
-        IDeathDateRepository DeathDate { get; }
+        ITaskWorkRepository TaskWork { get; }
 
         void Save();
     }

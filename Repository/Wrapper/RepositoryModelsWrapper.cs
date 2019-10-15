@@ -12,22 +12,22 @@ namespace Repository.Wrapper
     {
         private readonly RepositoryContext repository;
 
-        IDeathDateRepository deathDate;
+        ITaskWorkRepository taskWork;
 
         public RepositoryModelsWrapper(RepositoryContext repository)
         {
             this.repository = repository;
         }
 
-        public IDeathDateRepository DeathDate
+        public ITaskWorkRepository TaskWork
         {
             get
             {
-                if (this.deathDate == null)
+                if (this.taskWork == null)
                 {
-                    this.deathDate = new DeathDateRepository(this.repository);
+                    this.taskWork = new TaskWorkRepository(this.repository);
                 }
-                return this.deathDate;
+                return this.taskWork;
             }
         }
 

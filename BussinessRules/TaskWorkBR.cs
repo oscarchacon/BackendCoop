@@ -17,12 +17,12 @@ namespace BusinessRules
         }
 
 
-        public IEnumerable<TaskWork> GetAllDates(int? year = null, int? month = null)
+        public IEnumerable<TaskWork> GetAllTasks()
         {
             try
             {
-                var deathDatesFind = this.repository.DeathDate.GetAllDates(year, month);
-                return deathDatesFind;
+                var taskWorksFind = this.repository.TaskWork.GetAllTasks();
+                return taskWorksFind;
             }
             catch(Exception ex)
             {
@@ -30,12 +30,12 @@ namespace BusinessRules
             }
         }
 
-        public TaskWork GetDateById (Guid Id)
+        public TaskWork GetTaskById (Guid Id)
         {
             try
             {
-                var deathDateFind = this.repository.DeathDate.GetDateById(Id);
-                return deathDateFind;
+                var taskWorkFind = this.repository.TaskWork.GetTaskById(Id);
+                return taskWorkFind;
             }
             catch (Exception ex)
             {
@@ -43,18 +43,31 @@ namespace BusinessRules
             }
         }
 
-        public bool CreateDate(TaskWork deathDateNew)
+        public void CreateTask(TaskWork taskWorkNew)
         {
             try
             {
-                var deathDatesFind = this.repository.DeathDate.GetAllDateBetween(deathDateNew.Start, deathDateNew.End);
-                if (deathDatesFind != null)
-                {
-                    if (deathDatesFind.Count() > 0) { return false; }
-                }
-
-                this.repository.DeathDate.CreateDate(deathDateNew);
+                this.repository.TaskWork.CreateTask(taskWorkNew);
                 this.repository.Save();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+        }
+
+        public bool UdpdateTask(Guid taskId, TaskWork taskWorkUpdated)
+        {
+            try
+            {
+                var dbTaskWork = this.repository.TaskWork.GetTaskById(taskId);
+                if (dbTaskWork.IsEmptyObject() || dbTaskWork.IsObjectNull()) { return false; }
+
+                this.repository.TaskWork.UpdateTask(dbTaskWork, taskWorkUpdated);
+                this.repository.Save();
+
+                taskWorkUpdated.Id = taskId;
+
                 return true;
             }
             catch (Exception ex)
@@ -63,35 +76,15 @@ namespace BusinessRules
             }
         }
 
-        public bool UdpdateDate(Guid dateId, TaskWork deathDateUpdated)
+        public bool DeleteTask(Guid taskId)
         {
             try
             {
-                var dbDeathDate = this.repository.DeathDate.GetDateById(dateId);
-                if (dbDeathDate.IsEmptyObject() || dbDeathDate.IsObjectNull()) { return false; }
-
-                this.repository.DeathDate.UpdateDate(dbDeathDate, deathDateUpdated);
-                this.repository.Save();
-
-                deathDateUpdated.Id = dateId;
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex.InnerException);
-            }
-        }
-
-        public bool DeleteDate(Guid dateId)
-        {
-            try
-            {
-                var dbDeathDate = this.repository.DeathDate.GetDateById(dateId);
-                if (dbDeathDate.IsEmptyObject()) { return false; }
+                var dbTaskWork = this.repository.TaskWork.GetTaskById(taskId);
+                if (dbTaskWork.IsEmptyObject()) { return false; }
 
 
-                this.repository.DeathDate.DeleteDate(dbDeathDate);
+                this.repository.TaskWork.DeleteTask(dbTaskWork);
                 this.repository.Save();
 
                 return true;
