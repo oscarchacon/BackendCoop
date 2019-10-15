@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Entities.Models
 {
-    [Table("DeathDate")]
+    [Table("TaskWork")]
     public class TaskWork: IEntity
     {
         [Key]
