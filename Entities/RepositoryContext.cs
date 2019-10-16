@@ -12,6 +12,10 @@ namespace Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TaskWork>()
+                        .Property(taskWork => taskWork.CreateDate)
+                        .HasDefaultValue(DateTime.UtcNow);
+
             base.OnModelCreating(modelBuilder);
         }
     }
